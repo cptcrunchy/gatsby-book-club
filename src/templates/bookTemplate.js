@@ -1,5 +1,6 @@
 import React from 'react';
 import BookItem from '../components/BookItem';
+import {BookComments} from '../components/common';
 import {graphql} from 'gatsby';
 
 
@@ -14,6 +15,7 @@ const BookTemplate = (props) => {
                 bookSummary={book.summary}
                 bookTitle={book.title}
             />
+            <BookComments/>
         </React.Fragment>
     )
 }
