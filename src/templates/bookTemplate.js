@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import BookItem from '../components/BookItem';
 import {BookComments} from '../components/common';
+import {FirebaseContext} from '../components/Firebase'
 import {graphql} from 'gatsby';
 
 
 const BookTemplate = (props) => {
+
     const book = props.data.books;
+    const {firebase} = useContext(FirebaseContext);
 
     return (
         <React.Fragment>
@@ -15,7 +18,10 @@ const BookTemplate = (props) => {
                 bookSummary={book.summary}
                 bookTitle={book.title}
             />
-            <BookComments/>
+            {!!firebase &&
+              <BookComments firebase={firebase} bookId={book.id} />
+            }
+            
         </React.Fragment>
     )
 }
@@ -23,6 +29,7 @@ const BookTemplate = (props) => {
 export const query = graphql`
 query BookQuery($bookId: String!) {
     books(id: {eq: $bookId}) {
+        id
         summary
         title
         localImage {
