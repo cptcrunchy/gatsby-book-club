@@ -34,6 +34,8 @@ const AddBook = () => {
                          ...doc.data()
                     })
                 })
+
+                setAuthorId(availableAuthors[0].id)
                 setAuthors(availableAuthors)
             })
         }
