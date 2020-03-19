@@ -29,6 +29,13 @@ class Firebase {
       return this.db.collection('authors').get();
   }
 
+  async createBook({bookName, authorId, bookCover}){
+      const createBookCallable = this.functions.httpsCallable('createBook');
+      return createBookCallable({
+          bookName, authorId, bookCover
+      })
+  }
+
   async register({email, password, username}) {
     await this.auth.createUserWithEmailAndPassword(email, password);
     const createProfileCallable =  this.functions.httpsCallable('createPublicProfile');
