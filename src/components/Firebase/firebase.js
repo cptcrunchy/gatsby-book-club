@@ -34,7 +34,10 @@ class Firebase {
 
   subscribeToBookComments({bookId, onSnapshot}) {
     const bookRef = this.db.collection('books').doc(bookId);
-    return this.db.collection('comments').where('book', '==', bookRef).onSnapshot(onSnapshot)
+    return this.db.collection('comments')
+    .where('book', '==', bookRef)
+    .orderBy('dateCreated', 'desc')
+    .onSnapshot(onSnapshot)
   }
 
   async login({email, password}) {

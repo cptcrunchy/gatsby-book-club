@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import {Button, Input} from './'
+import moment from 'moment'
 
 const CommentForm = styled.form`
     display: flex;
@@ -51,15 +52,19 @@ export const BookComments = ({firebase, bookId}) => {
 
     function handlePostCommentSubmit(e){
         e.preventDefault();
-        console.log(commentText);
         firebase.postComment({
             text: commentText,
             bookId
         })
+        setCommentText('')
     }
 
     function handleOnChange(e){
         setCommentText(e.target.value)
+    }
+
+    function toTitleCase(s){
+        return [s.charAt(0).toUpperCase(), s.slice(1)].join('')
     }
 
     return (
@@ -72,7 +77,7 @@ export const BookComments = ({firebase, bookId}) => {
             </CommentForm>
             {comments.map( comment => (
                 <CommentListItem key={comment.id}>
-                    <strong>{comment.username}</strong>
+                    <strong>{toTitleCase(comment.username)}</strong> - {moment(comment.dateCreated.toDate()).format("hh:mm DD MMM YYYY")}
                     <div>
                         {comment.text}
                     </div>
