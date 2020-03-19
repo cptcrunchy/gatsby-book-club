@@ -47,6 +47,9 @@ const AddBook = () => {
             console.log(bookCover)
             console.log(bookName)
             console.log(authorId)
+            firebase.createBook({
+                bookCover, bookName, authorId
+            })
         }}>
             <FormField>
                 <strong>Book Title</strong>
