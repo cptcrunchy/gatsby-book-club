@@ -48,7 +48,7 @@ export const BookComments = ({firebase, bookId}) => {
             if(unsubscribe) unsubscribe();
         }
     
-    }, [])
+    }, [firebase, bookId])
 
     function handlePostCommentSubmit(e){
         e.preventDefault();
