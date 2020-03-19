@@ -13,15 +13,17 @@ class Firebase {
     }
   }
 
-  async getUserProfile({userId}) {
-    return this.db.collection('publicProfiles').where('userId', '==', userId).get();
+  getUserProfile({userId, onSnapshot}) {
+    return this.db.collection('publicProfiles')
+    .where('userId', '==', userId)
+    .limit(1)
+    .onSnapshot(onSnapshot)
   }
 
   async register({email, password, username}) {
-    const newUser = await this.auth.createUserWithEmailAndPassword(email, password);
-    return this.db.collection('publicProfiles').doc(username).set({
-      userId: newUser.user.uid
-    })
+    await this.auth.createUserWithEmailAndPassword(email, password);
+    const createProfileCallable =  this.functions.httpsCallable('createPublicProfile');
+    return createProfileCallable({username})
   }
 
   async postComment({text, bookId}) {
