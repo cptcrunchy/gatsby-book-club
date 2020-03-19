@@ -15,6 +15,9 @@ const AddBook = () => {
     const [bookCover, setBookCover] = useState('');
     const [bookName, setBookName] = useState('');
     const [authorId, setAuthorId] = useState('');
+    const [bookSummary, setBookSummary] = useState('');
+    const [success, setSuccess] = useState(false);
+
 
     useEffect(() => {
         fileReader.addEventListener('load', () => {
@@ -44,11 +47,13 @@ const AddBook = () => {
     return (
         <Form onSubmit={e => {
             e.preventDefault();
-            console.log(bookCover)
-            console.log(bookName)
-            console.log(authorId)
             firebase.createBook({
-                bookCover, bookName, authorId
+                bookCover,
+                bookName,
+                bookSummary,
+                authorId
+            }).then( () =>{
+                setSuccess(true)
             })
         }}>
             <FormField>
@@ -57,6 +62,7 @@ const AddBook = () => {
                 placeholder="book name"
                 onChange={e => {
                     e.persist();
+                    setSuccess(false)
                     setBookName(e.target.value)
 
                 }}  />
@@ -67,6 +73,7 @@ const AddBook = () => {
                     <select value={authorId}
                     onChange={e => {
                         e.persist();
+                        setSuccess(false)
                         setAuthorId(e.target.value)
                     }} >
                         {authors.map(a => (
@@ -82,9 +89,23 @@ const AddBook = () => {
                 <Input type="file"
                 onChange={e => {
                     e.persist();
+                    setSuccess(false)
                     fileReader.readAsDataURL(e.target.files[0])
                 }} />
             </FormField>
+            <FormField>
+                <strong>Book Summary</strong>
+                <Input placeholder="book summary"
+                value={bookSummary}
+                onChange={e => {
+                    e.persist();
+                    setSuccess(false)
+                    setBookSummary(e.target.value)
+                }} />
+            </FormField>
+            {!!success && 
+            <span>New book added successfully!</span>
+            }
             <Button type="submit" block>
                 Add new book        
             </Button>
