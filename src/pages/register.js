@@ -1,10 +1,18 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import {Form, Input, Button, ErrorMessage} from '../components/common'
 import {FirebaseContext} from '../components/Firebase'
 
 const Register = () => {
     const {firebase} = useContext(FirebaseContext)
     const [errorMessage, setErrorMessage] = useState('')
+    let isMounted = true;
+
+    
+    useEffect(() => {
+        return () => {
+            isMounted = false;
+        }
+    },[])
 
     const [formValues, setFormValues] = useState({
         email: '',
@@ -31,7 +39,9 @@ const Register = () => {
               email: formValues.email,
               password: formValues.password
           }).catch( error => {
-              setErrorMessage(error.message)
+            if(isMounted){
+                setErrorMessage(error.message)
+            }
           })
         }else {
             setErrorMessage("Passwords do not match")

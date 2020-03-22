@@ -2,12 +2,17 @@ import React, {useContext, useEffect, useState} from 'react'
 import {FirebaseContext} from '../components/Firebase'
 import {Form, Input, Button} from '../components/common'
 import styled from 'styled-components'
+import {navigate} from 'gatsby'
 
 const FormField = styled.div`
     margin: 0 0 20px 0;
 `
 
-const fileReader = new FileReader();
+let fileReader;
+
+if(typeof window !== 'undefined'){
+    fileReader = new FileReader();
+}
 
 const AddBook = () => {
     const {firebase} = useContext(FirebaseContext)
@@ -17,7 +22,14 @@ const AddBook = () => {
     const [authorId, setAuthorId] = useState('');
     const [bookSummary, setBookSummary] = useState('');
     const [success, setSuccess] = useState(false);
+    let isMounted = true;
 
+    
+    useEffect(() => {
+        return () => {
+            isMounted = false;
+        }
+    },[])
 
     useEffect(() => {
         fileReader.addEventListener('load', () => {
@@ -29,20 +41,23 @@ const AddBook = () => {
         // query all available authors
         if(firebase){
             firebase.getAuthors().then( snapshot => {
-                const availableAuthors = []
+                if(isMounted){
 
-                snapshot.forEach(doc => {
-                    availableAuthors.push({
-                        id: doc.id,
-                         ...doc.data()
+                    const availableAuthors = []
+                    
+                    snapshot.forEach(doc => {
+                        availableAuthors.push({
+                            id: doc.id,
+                            ...doc.data()
+                        })
                     })
-                })
-
-                setAuthorId(availableAuthors[0].id)
-                setAuthors(availableAuthors)
+                    
+                    setAuthorId(availableAuthors[0].id)
+                    setAuthors(availableAuthors)
+                }
             })
         }
-    }, [firebase])
+    }, [])
 
     return (
         <Form onSubmit={e => {
@@ -53,7 +68,10 @@ const AddBook = () => {
                 bookSummary,
                 authorId
             }).then( () =>{
-                setSuccess(true)
+                if(isMounted){    
+                    setSuccess(true)
+                    navigate('/')
+                }
             })
         }}>
             <FormField>

@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import {Form, Input, Button} from '../components/common'
 import {FirebaseContext} from '../components/Firebase'
 
@@ -6,8 +6,15 @@ import {FirebaseContext} from '../components/Firebase'
 const AddAuthor = () => {
     const {firebase} = useContext(FirebaseContext)
     const [authorName, setAuthorName] = useState('');
-    const [success, setSuccess] = useState(false)
+    const [success, setSuccess] = useState(false) 
+    let isMounted = true;
+
     
+    useEffect(() => {
+        return () => {
+            isMounted = false;
+        }
+    },[])
 
     function handleSubmit(e){
         e.preventDefault();      
@@ -15,8 +22,10 @@ const AddAuthor = () => {
             authorName
         })
         .then(() => {
-            setAuthorName('')
-            setSuccess(true)
+            if(isMounted){
+                setAuthorName('')    
+                setSuccess(true)
+            }
         })
     }
 
