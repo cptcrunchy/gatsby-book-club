@@ -29,6 +29,14 @@ const BookItemContentWrapper = styled.div`
     padding: 0 0 0 8px;
 `;
 
+const BookItemBtnWrapper = styled.div`
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: end;
+
+`
+
 const BookItem = ({authorName, bookTitle, bookSummary, bookCover, children}) => {
     return (
         <BookItemWrapper>
@@ -39,9 +47,9 @@ const BookItem = ({authorName, bookTitle, bookSummary, bookCover, children}) => 
 
             <h2>{bookTitle} <small>{authorName}</small></h2>
             <p>{bookSummary}</p>
-            <div>
+            <BookItemBtnWrapper>
                 {children}
-            </div>
+            </BookItemBtnWrapper>
             </BookItemContentWrapper>
         </BookItemWrapper>
     )

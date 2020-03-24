@@ -18,23 +18,27 @@ const LinkButton = styled.div`
     }
   }
 `
+
 const IndexPage = (props) => {
-  
+
   return (
   <React.Fragment>
     <SEO title="Home" />
-      {props.data.allBooks.edges.map(edge => (
+      {props.data.allBooks.edges.map(edge => {
+          const book = edge.node;
+         return (
         <BookItem 
-          bookCover={edge.node.localImage.childImageSharp.fixed}
-          bookTitle={edge.node.title}
-          bookSummary={edge.node.summary}
-          authorName={edge.node.author.name}
-          key={edge.node.id}>
+          bookCover={book.localImage.childImageSharp.fixed}
+          bookTitle={book.title}
+          bookSummary={book.summary}
+          authorName={book.author.name}
+          key={book.id}>
           <LinkButton>
-            <Link to={`/book/${edge.node.id}`}>Join conversation</Link>
+            <Link to={`/book/${book.id}`}>Join conversation</Link>
           </LinkButton>
         </BookItem>
-      ))}
+        )}
+      )}
   </React.Fragment>
 );
 }

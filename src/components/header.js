@@ -65,7 +65,7 @@ const Header = ({ siteTitle }) => {
  //console.log(user);
 
   function handleLogoutClick(){
-    firebase.logout().then( () => navigate('/login'))
+    firebase.logout().then( () => navigate('/'))
   }
 
  return (

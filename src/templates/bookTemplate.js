@@ -3,12 +3,12 @@ import BookItem from '../components/BookItem';
 import {BookComments} from '../components/common';
 import {FirebaseContext} from '../components/Firebase'
 import {graphql} from 'gatsby';
-
+import {DeleteButton} from '../components/common'
 
 const BookTemplate = (props) => {
 
     const book = props.data.books;
-    const {firebase} = useContext(FirebaseContext);
+    const {firebase, user} = useContext(FirebaseContext);
 
     return (
         <React.Fragment>
@@ -18,6 +18,9 @@ const BookTemplate = (props) => {
                 bookSummary={book.summary}
                 bookTitle={book.title}
             />
+            {!!user && user.isAdmin &&
+                <DeleteButton firebase={firebase} bookId={book.id} />
+            }
             {!!firebase &&
               <BookComments firebase={firebase} bookId={book.id} />
             }

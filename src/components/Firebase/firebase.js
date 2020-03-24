@@ -36,6 +36,11 @@ class Firebase {
       })
   }
 
+  async deleteBook({bookId}) {
+      const deleteBookCallable = this.functions.httpsCallable('deleteBook');
+      return deleteBookCallable({bookId});
+  }
+
   async register({email, password, username}) {
     await this.auth.createUserWithEmailAndPassword(email, password);
     const createProfileCallable =  this.functions.httpsCallable('createPublicProfile');
